@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "376358532668",
+    "project_id": "nssapp-c98cf",
+    "storage_bucket": "nssapp-c98cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:376358532668:android:e7499d82357b32a52df539",
+        "android_client_info": {
+          "package_name": "edu.somaiya.nssapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "376358532668-80gsqvs00qkssd6lircor98ng2tn31dm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwWt71xJIpSqawbc5p6l_9U0I6I1yDs8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "376358532668-80gsqvs00qkssd6lircor98ng2tn31dm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "376358532668-mp84ipquvqvetiq4d694vp2g6r567osn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "edu.somaiya.nssapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
