@@ -7,15 +7,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nssapp/home_page.dart';
 
-import 'package:nssapp/main.dart';
-import 'package:nssapp/views/login_view.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const LoginView());
+    await tester.pumpWidget(const MaterialApp());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
