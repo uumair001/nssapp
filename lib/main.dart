@@ -1,117 +1,45 @@
+import 'package:ems/services/notification_service.dart';
+import 'package:ems/utils/app_constants.dart';
+import 'package:ems/views/bottom_nav_bar/bottom_bar_view.dart';
+import 'package:ems/views/onboarding_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart'
-    show
-        AppBar,
-        BuildContext,
-        Colors,
-        Column,
-        ConnectionState,
-        Container,
-        FutureBuilder,
-        InputDecoration,
-        MaterialApp,
-        Scaffold,
-        State,
-        StatefulWidget,
-        Text,
-        TextButton,
-        TextEditingController,
-        TextField,
-        TextInputType,
-        ThemeData,
-        Widget,
-        WidgetsFlutterBinding,
-        runApp;
-import 'firebase_options.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-void main() {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  print(message.notification!.toString());
+}
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(
-    MaterialApp(
-      title: 'NSSAPP',
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-      ),
-      home: const RegisterView(),
-    ),
-  );
+
+  Stripe.publishableKey = publishableKey;
+  await Firebase.initializeApp();
+  LocalNotificationService.initialize();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  runApp(MyApp());
 }
 
-class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
-
-  @override
-  State<RegisterView> createState() => _RegisterViewState();
-}
-
-class _RegisterViewState extends State<RegisterView> {
-  late final TextEditingController _email;
-  late final TextEditingController _password;
-
-  @override
-  void initState() {
-    _email = TextEditingController();
-    _password = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _email.dispose();
-    _password.dispose();
-    super.dispose();
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('NSS'),
-      ),
-      body: FutureBuilder(
-        future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.web,
-          // options: DefaultFirebaseOptions.currentPlatform,
+    return GetMaterialApp(
+      theme: ThemeData(
+        textTheme: GoogleFonts.latoTextTheme(
+          Theme.of(context)
+              .textTheme, // If this is not set, then ThemeData.light().textTheme is used.
         ),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              return Column(
-                children: [
-                  TextField(
-                    controller: _email,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    decoration: const InputDecoration(
-                        hintText: 'Phone number,email or username'),
-                  ),
-                  TextField(
-                    controller: _password,
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(hintText: 'Password'),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      final email = _email.text;
-                      final password = _password.text;
-                      final userCredential = await FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                              email: email, password: password);
-                      print(userCredential);
-                    },
-                    child: const Text('Register'),
-                  ),
-                ],
-              );
-            default:
-              return const Text('Loading...');
-          }
-        },
       ),
+      title: 'Flutter Demo',
+      home: FirebaseAuth.instance.currentUser == null
+          ? OnBoardingScreen()
+          : BottomBarView(),
     );
   }
 }
